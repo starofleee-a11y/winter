@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read/write for analysis results (can be restricted later)
+    match /analyses/{analysisId} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}
