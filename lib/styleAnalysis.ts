@@ -15,8 +15,21 @@ export async function analyzeStyle(imageFile: File): Promise<StyleResult> {
 
     // Step 2: Google Cloud Vision API analysis (server-side)
     console.log('Starting vision analysis...')
-    const visionAnalysis = await analyzeWithVisionAPI(imageFile)
-    console.log('Vision analysis complete:', visionAnalysis)
+    let visionAnalysis: VisionAnalysis
+    try {
+      visionAnalysis = await analyzeWithVisionAPI(imageFile)
+      console.log('Vision analysis complete:', visionAnalysis)
+    } catch (error) {
+      console.warn('Vision API failed, using color analysis only:', error)
+      // Fallback to basic analysis without Vision API
+      visionAnalysis = {
+        labels: [],
+        colors: [],
+        faces: 0,
+        makeup: false,
+        accessories: [],
+      }
+    }
 
     // Step 3: Classify style
     console.log('Classifying style...')

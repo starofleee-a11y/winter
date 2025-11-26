@@ -20,8 +20,17 @@ export default function Home() {
       const analysisResult = await analyzeStyle(imageFile)
       setResult(analysisResult)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Analysis failed')
+      const errorMessage = err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다'
+      setError(errorMessage)
       console.error('Style analysis error:', err)
+      // 디버깅을 위한 추가 정보
+      if (err instanceof Error) {
+        console.error('Error details:', {
+          message: err.message,
+          stack: err.stack,
+          name: err.name
+        })
+      }
     } finally {
       setAnalyzing(false)
     }
